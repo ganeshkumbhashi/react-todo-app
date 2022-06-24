@@ -10,23 +10,7 @@ class TodoContainer extends React.Component
 {
    state = {
 
-    todos : [
-        {
-            id: uuidv4(),
-            title: "Setup dev environment",
-            completed: true
-        },
-        {
-            id: uuidv4(),
-            title: "Setup sit environment",
-            completed: false
-        },
-        {
-            id: uuidv4(),
-            title: "Setup uat environment",
-            completed: false
-        }
-    ]
+    todos : []
 
    };
 
@@ -82,6 +66,30 @@ class TodoContainer extends React.Component
               
           }
       ))
+   }
+
+   componentDidMount()
+   {
+        const temp = localStorage.getItem("todos")
+        const loadedTodos = JSON.parse(temp)
+        if (loadedTodos) {
+        this.setState({
+            todos: loadedTodos
+        })
+        }
+   }
+
+   componentDidUpdate(prevProps,prevState) 
+   {
+            if(prevState.todos !== this.state.todos) {
+                const temp = JSON.stringify(this.state.todos)
+                localStorage.setItem("todos", temp)
+            }
+   }
+
+   componentWillUnmount() 
+   {
+        console.log("Cleaning up...")
    }
 
     render(){
